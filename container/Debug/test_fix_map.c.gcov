@@ -1,0 +1,301 @@
+        -:    0:Source:/home/shisu/.codelite/sos/container/test/test_fix_map.c
+        -:    0:Programs:4
+        -:    1:#include <stdio.h>
+        -:    2:#include "utf.h"
+        -:    3:#include "fix_map.h"
+        -:    4:
+function compare called 20 returned 100% blocks executed 100%
+       20:    5:int compare(void *p1, void *p2)
+        -:    6:{
+       20:    7:    return p1 == p2 ? 1 : 0;
+        -:    8:}
+        -:    9:
+        -:   10:/**
+        -:   11: * capacity is 0
+        -:   12: */
+function test_fix_map_init_0 called 2 returned 100% blocks executed 67%
+        2:   13:test_result_t test_fix_map_init_0()
+        -:   14:{
+        2:   15:    EXPECT(NULL, fix_map_init(0, compare));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   16:    return PASS;
+        -:   17:}
+        -:   18:
+        -:   19:/**
+        -:   20: * capacity is not 0
+        -:   21: */
+function test_fix_map_init_1 called 2 returned 100% blocks executed 67%
+        2:   22:test_result_t test_fix_map_init_1()
+        -:   23:{
+        2:   24:    EXPECT_NOT(NULL, fix_map_init(1, compare));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   25:    return PASS;
+        -:   26:}
+        -:   27:
+        -:   28:/**
+        -:   29: * no push action happen
+        -:   30: */
+function test_fix_map_size_0 called 2 returned 100% blocks executed 71%
+        2:   31:test_result_t test_fix_map_size_0()
+        -:   32:{
+        2:   33:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:   34:    EXPECT(0, fix_map_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   35:    
+        2:   36:    return PASS;
+        -:   37:}
+        -:   38:
+        -:   39:/**
+        -:   40: * size when one push action happen
+        -:   41: */
+function test_fix_map_size_1 called 2 returned 100% blocks executed 64%
+        2:   42:test_result_t test_fix_map_size_1()
+        -:   43:{
+        2:   44:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:   45:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   46:    EXPECT(1, fix_map_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   47:    
+        2:   48:    return PASS;
+        -:   49:}
+        -:   50:
+        -:   51:/**
+        -:   52: * size when reuse happen
+        -:   53: */
+function test_fix_map_size_2 called 2 returned 100% blocks executed 55%
+        2:   54:test_result_t test_fix_map_size_2()
+        -:   55:{
+        2:   56:    void *ctx = fix_map_init(2, compare);
+call    0 returned 100%
+        2:   57:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   58:    EXPECT(0, fix_map_push(ctx, (void *)1235, (void *)5679));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   59:    EXPECT(2, fix_map_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   60:    EXPECT((void *)5678, fix_map_pop(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   61:    EXPECT(1, fix_map_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   62:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   63:    EXPECT(2, fix_map_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   64:    
+        2:   65:    return PASS;
+        -:   66:}
+        -:   67:
+        -:   68:/**
+        -:   69: * push fail when full
+        -:   70: */
+function test_fix_map_push_0 called 2 returned 100% blocks executed 64%
+        2:   71:test_result_t test_fix_map_push_0()
+        -:   72:{
+        2:   73:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:   74:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   75:    EXPECT(-1, fix_map_push(ctx, (void *)1235, (void *)5679));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   76:   
+        2:   77:    return PASS;
+        -:   78:}
+        -:   79:
+        -:   80:/**
+        -:   81: * push fail when full
+        -:   82: */
+function test_fix_map_push_1 called 2 returned 100% blocks executed 64%
+        2:   83:test_result_t test_fix_map_push_1()
+        -:   84:{
+        2:   85:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:   86:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   87:    EXPECT(-1, fix_map_push(ctx, (void *)1235, (void *)5679));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   88:   
+        2:   89:    return PASS;
+        -:   90:}
+        -:   91:
+        -:   92:/**
+        -:   93: * push with update
+        -:   94: */
+function test_fix_map_push_2 called 2 returned 100% blocks executed 58%
+        2:   95:test_result_t test_fix_map_push_2()
+        -:   96:{
+        2:   97:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:   98:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   99:    EXPECT((void *)5678, fix_map_get(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:  100:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5679));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:  101:    EXPECT((void *)5679, fix_map_get(ctx, (void *)1234));   
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:  102:
+        2:  103:    return PASS;
+        -:  104:}
+        -:  105:
+        -:  106:/**
+        -:  107: * get with correct key
+        -:  108: */
+function test_fix_map_get_0 called 2 returned 100% blocks executed 64%
+        2:  109:test_result_t test_fix_map_get_0()
+        -:  110:{
+        2:  111:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:  112:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:  113:    EXPECT((void *)5678, fix_map_get(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:  114:   
+        2:  115:    return PASS;
+        -:  116:}
+        -:  117:
+        -:  118:/**
+        -:  119: * get with wrong key
+        -:  120: */
+function test_fix_map_get_1 called 2 returned 100% blocks executed 71%
+        2:  121:test_result_t test_fix_map_get_1()
+        -:  122:{
+        2:  123:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:  124:    EXPECT(NULL, fix_map_get(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:  125:   
+        2:  126:    return PASS;
+        -:  127:}
+        -:  128:
+        -:  129:/**
+        -:  130: * pop an empty map
+        -:  131: */
+function test_fix_map_pop_0 called 2 returned 100% blocks executed 71%
+        2:  132:test_result_t test_fix_map_pop_0()
+        -:  133:{
+        2:  134:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:  135:    EXPECT(NULL, fix_map_pop(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:  136:   
+        2:  137:    return PASS;
+        -:  138:}
+        -:  139:
+        -:  140:/**
+        -:  141: * pop an data map
+        -:  142: */
+function test_fix_map_pop_1 called 2 returned 100% blocks executed 64%
+        2:  143:test_result_t test_fix_map_pop_1()
+        -:  144:{
+        2:  145:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:  146:    EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:  147:    EXPECT((void *)5678, fix_map_pop(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:  148:   
+        2:  149:    return PASS;
+        -:  150:}
+        -:  151:
+        -:  152:/**
+        -:  153: * destroy a map
+        -:  154: */
+function test_fix_map_destroy_0 called 2 returned 100% blocks executed 60%
+        2:  155:test_result_t test_fix_map_destroy_0()
+        -:  156:{
+        2:  157:    void *ctx = fix_map_init(1, compare);
+call    0 returned 100%
+        2:  158:    EXPECT_NOT(NULL, ctx);
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+call    2 never executed
+        2:  159:    fix_map_destroy(&ctx);
+call    0 returned 100%
+        2:  160:    EXPECT(NULL, ctx);
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+call    2 never executed
+        -:  161:    
+        2:  162:    return PASS;
+        -:  163:}

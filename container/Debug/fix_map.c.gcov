@@ -1,0 +1,211 @@
+        -:    0:Source:/home/shisu/.codelite/sos/container/src/fix_map.c
+        -:    0:Graph:src_fix_map.gcno
+        -:    0:Data:src_fix_map.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdio.h>
+        -:    2:#include <stddef.h>
+        -:    3:#include <stdlib.h>
+        -:    4:
+        -:    5:typedef struct
+        -:    6:{
+        -:    7:    void *key;
+        -:    8:    void *value;
+        -:    9:} pair_t;
+        -:   10:
+        -:   11:typedef struct 
+        -:   12:{
+        -:   13:    size_t head;
+        -:   14:    size_t tail;
+        -:   15:    size_t capa;
+        -:   16:    pair_t *nodes;
+        -:   17:    int (*equal)(void *p1, void *p2);
+        -:   18:} fix_map_ctx_t;
+        -:   19:
+function fix_map_size called 64 returned 100% blocks executed 86%
+       64:   20:size_t fix_map_size(void *ctx)
+        -:   21:{
+       64:   22:    if (ctx == NULL)
+branch  0 taken 3% (fallthrough)
+branch  1 taken 97%
+        -:   23:    {
+        2:   24:        return 0;
+        -:   25:    }
+        -:   26:    
+       62:   27:    fix_map_ctx_t *fctx = ctx;
+       62:   28:    int dis = fctx->tail - fctx->head;
+       62:   29:    return dis >= 0 ? dis : dis + fctx->capa;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:   30:}
+        -:   31:
+function fix_map_is_full called 18 returned 100% blocks executed 100%
+       18:   32:int fix_map_is_full(void *ctx)
+        -:   33:{
+       18:   34:    fix_map_ctx_t *fctx = ctx;
+       18:   35:    return fix_map_size(ctx) == fctx->capa ? 1 : 0;
+call    0 returned 100%
+        -:   36:}
+        -:   37:
+function fix_map_is_empty called 34 returned 100% blocks executed 100%
+       34:   38:int fix_map_is_empty(void *ctx)
+        -:   39:{
+       34:   40:    return fix_map_size(ctx) == 0 ? 1 : 0;
+call    0 returned 100%
+        -:   41:}
+        -:   42:
+function fix_map_get_id called 34 returned 100% blocks executed 100%
+       34:   43:static int fix_map_get_id(fix_map_ctx_t *ctx, void *key)
+        -:   44:{
+       34:   45:    if (ctx == NULL || fix_map_is_empty(ctx) == 1)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+call    2 returned 100%
+branch  3 taken 47% (fallthrough)
+branch  4 taken 53%
+        -:   46:    {
+       16:   47:        return -1;
+        -:   48:    }
+        -:   49: 
+       18:   50:    int i = 0;
+       28:   51:    for(; i < ctx->capa; i++)
+branch  0 taken 79%
+branch  1 taken 21% (fallthrough)
+        -:   52:    {
+       22:   53:        if (ctx->nodes[i].key != NULL && ctx->equal(key, ctx->nodes[i].key))
+branch  0 taken 82% (fallthrough)
+branch  1 taken 18%
+call    2 returned 100%
+branch  3 taken 67% (fallthrough)
+branch  4 taken 33%
+        -:   54:        {
+       12:   55:            return i;
+        -:   56:        }
+        -:   57:    }
+        -:   58:    
+        6:   59:    return -1;
+        -:   60:}
+        -:   61:
+function fix_map_init called 24 returned 100% blocks executed 100%
+       24:   62:void *fix_map_init(size_t capacity, int (*compare)(void *p1, void *p2))
+        -:   63:{
+       24:   64:    if (capacity == 0)
+branch  0 taken 8% (fallthrough)
+branch  1 taken 92%
+        -:   65:    {
+        2:   66:        return NULL;
+        -:   67:    }
+        -:   68:    
+       22:   69:    fix_map_ctx_t *ctx = calloc(1, sizeof(fix_map_ctx_t));
+       22:   70:    ctx->nodes = calloc(capacity + 1, sizeof(pair_t));
+       22:   71:    ctx->equal = compare;
+       22:   72:    ctx->capa = capacity;
+       22:   73:    return ctx;
+        -:   74:}
+        -:   75:
+function fix_map_push called 22 returned 100% blocks executed 100%
+       22:   76:int fix_map_push(void *ctx, void *key, void *value)
+        -:   77:{
+       22:   78:    if (ctx == NULL)
+branch  0 taken 9% (fallthrough)
+branch  1 taken 91%
+        -:   79:    {
+        -:   80://        printf("Cannot insert data to queue\n");
+        2:   81:        return -1;
+        -:   82:    }
+        -:   83:
+       20:   84:    fix_map_ctx_t *fctx = ctx;
+       20:   85:    int id = fix_map_get_id(fctx, key);
+call    0 returned 100%
+       20:   86:    if (id != -1)
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+        -:   87:    {
+        2:   88:        fctx->nodes[id].value = value;
+        -:   89:    }
+        -:   90:    else
+        -:   91:    {
+       18:   92:        if (fix_map_is_full(ctx) == 1)
+call    0 returned 100%
+branch  1 taken 11% (fallthrough)
+branch  2 taken 89%
+        -:   93:        {
+        2:   94:            return -1;
+        -:   95:        }
+        -:   96:        
+       16:   97:        fctx->nodes[fctx->tail].key = key;
+       16:   98:        fctx->nodes[fctx->tail].value = value;
+       16:   99:        fctx->tail++;
+        -:  100:    }
+        -:  101:    
+       18:  102:    return 0;
+        -:  103:}
+        -:  104:
+function fix_map_get called 8 returned 100% blocks executed 86%
+        8:  105:void *fix_map_get(void *ctx, void *key)
+        -:  106:{
+        8:  107:    if (ctx == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  108:    {
+    #####:  109:        return NULL;
+        -:  110:    }
+        -:  111:    
+        8:  112:    fix_map_ctx_t *fctx = ctx;
+        8:  113:    int id = fix_map_get_id(fctx, key);
+call    0 returned 100%
+        8:  114:    if (id != -1)
+branch  0 taken 75% (fallthrough)
+branch  1 taken 25%
+        -:  115:    {
+        6:  116:        return fctx->nodes[id].value;
+        -:  117:    }
+        -:  118:    
+        2:  119:    return NULL;
+        -:  120:}
+        -:  121:
+function fix_map_pop called 6 returned 100% blocks executed 86%
+        6:  122:void *fix_map_pop(void *ctx, void *key)
+        -:  123:{
+        6:  124:    if (ctx == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  125:    {
+    #####:  126:        return NULL;
+        -:  127:    }
+        -:  128:    
+        6:  129:    fix_map_ctx_t *fctx = ctx;
+        6:  130:    int id = fix_map_get_id(fctx, key);
+call    0 returned 100%
+        6:  131:    if (id != -1)
+branch  0 taken 67% (fallthrough)
+branch  1 taken 33%
+        -:  132:    {
+        4:  133:        void *value = fctx->nodes[id].value;
+        -:  134:        
+        4:  135:        fctx->tail--;
+        4:  136:        fctx->nodes[id].key = fctx->nodes[fctx->tail].key;
+        4:  137:        fctx->nodes[id].value = fctx->nodes[fctx->tail].value;
+        4:  138:        fctx->nodes[fctx->tail].key = NULL;
+        4:  139:        return value;
+        -:  140:    }
+        -:  141:    
+        2:  142:    return NULL;
+        -:  143:}
+        -:  144:
+function fix_map_destroy called 2 returned 100% blocks executed 75%
+        2:  145:void fix_map_destroy(void **ctx)
+        -:  146:{
+        2:  147:    if (*ctx == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  148:    {
+        2:  149:        return;
+        -:  150:    }
+        -:  151:    
+        2:  152:    fix_map_ctx_t *fctx = *ctx;
+        2:  153:    free(fctx->nodes);
+        2:  154:    fctx->nodes = NULL;
+        2:  155:    free(fctx);
+        2:  156:    *ctx = NULL;
+        -:  157:}

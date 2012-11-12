@@ -1,0 +1,73 @@
+        -:    0:Source:/home/shisu/.codelite/sos/utf/src/utf.c
+        -:    0:Graph:src_utf.gcno
+        -:    0:Data:src_utf.gcda
+        -:    0:Runs:0
+        -:    0:Programs:0
+        -:    1:#include <stdio.h>
+        -:    2:#include <stddef.h>
+        -:    3:#include <stdlib.h>
+        -:    4:#include <string.h>
+        -:    5:#include "utf.h"
+        -:    6:#include "cases.h"
+        -:    7:
+        -:    8:typedef struct case_t
+        -:    9:{
+        -:   10:    test_result_t (*test)();
+        -:   11:    char *name;
+        -:   12:    struct case_t *next;
+        -:   13:} case_t;
+        -:   14:
+        -:   15:case_t *case_head = NULL;
+        -:   16:case_t *case_tail = NULL;
+        -:   17:
+    #####:   18:char *str_dup(char *src)
+        -:   19:{
+    #####:   20:    char *dst = calloc(strlen(src), sizeof(char));
+    #####:   21:    strcpy(dst, src);
+    #####:   22:    return dst;
+        -:   23:}
+        -:   24:
+    #####:   25:void add_case(test_result_t (*test)(), char *name)
+        -:   26:{
+    #####:   27:    case_t *test_case = calloc(1, sizeof(sizeof(case_t)));
+    #####:   28:    test_case->test = test;
+    #####:   29:    test_case->name = str_dup(name);
+    #####:   30:    test_case->test();
+        -:   31:    
+    #####:   32:    if (case_head == NULL)
+        -:   33:    {
+    #####:   34:        case_head = test_case;
+    #####:   35:        case_tail = test_case;
+        -:   36:    }
+        -:   37:    else
+        -:   38:    {
+    #####:   39:        case_tail->next = test_case;
+    #####:   40:        case_tail = case_tail->next;
+        -:   41:    }
+    #####:   42:}
+        -:   43:
+    #####:   44:void check_result(case_t *test_case)
+        -:   45:{
+    #####:   46:    if (test_case->test() == PASS) 
+        -:   47:    { 
+    #####:   48:        printf("[PASS] %s\n", test_case->name); 
+        -:   49:    } 
+        -:   50:    else 
+        -:   51:    { 
+    #####:   52:        printf("[*NP*] %s\n", test_case->name); 
+        -:   53:    }
+    #####:   54:}
+        -:   55:
+    #####:   56:int main(int argc, char **argv)
+        -:   57:{
+    #####:   58:    all_cases();
+        -:   59:    
+    #####:   60:    case_t *test_case = case_head;
+    #####:   61:    while (test_case != NULL)
+        -:   62:    {
+    #####:   63:        check_result(test_case);
+    #####:   64:        test_case = test_case->next;
+        -:   65:    }
+        -:   66:    
+    #####:   67:	return 0;
+        -:   68:}

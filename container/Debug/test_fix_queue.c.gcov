@@ -1,0 +1,224 @@
+        -:    0:Source:/home/shisu/.codelite/sos/container/test/test_fix_queue.c
+        -:    0:Programs:4
+        -:    1:#include <stdio.h>
+        -:    2:#include "utf.h"
+        -:    3:#include "fix_queue.h"
+        -:    4:
+        -:    5:/**
+        -:    6: * capacity is 0
+        -:    7: */
+function test_fix_queue_init_0 called 2 returned 100% blocks executed 67%
+        2:    8:test_result_t test_fix_queue_init_0()
+        -:    9:{
+        2:   10:    EXPECT(NULL, fix_queue_init(0));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   11:    return PASS;
+        -:   12:}
+        -:   13:
+        -:   14:/**
+        -:   15: * capacity is not 0
+        -:   16: */
+function test_fix_queue_init_1 called 2 returned 100% blocks executed 67%
+        2:   17:test_result_t test_fix_queue_init_1()
+        -:   18:{
+        2:   19:    EXPECT_NOT(NULL, fix_queue_init(1));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   20:    return PASS;
+        -:   21:}
+        -:   22:
+        -:   23:/**
+        -:   24: * no push action happen
+        -:   25: */
+function test_fix_queue_size_0 called 2 returned 100% blocks executed 71%
+        2:   26:test_result_t test_fix_queue_size_0()
+        -:   27:{
+        2:   28:    void *ctx = fix_queue_init(1);
+call    0 returned 100%
+        2:   29:    EXPECT(0, fix_queue_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   30:    
+        2:   31:    return PASS;
+        -:   32:}
+        -:   33:
+        -:   34:/**
+        -:   35: * size when one push action happen
+        -:   36: */
+function test_fix_queue_size_1 called 2 returned 100% blocks executed 64%
+        2:   37:test_result_t test_fix_queue_size_1()
+        -:   38:{
+        2:   39:    void *ctx = fix_queue_init(1);
+call    0 returned 100%
+        2:   40:    EXPECT(0, fix_queue_push(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   41:    EXPECT(1, fix_queue_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   42:    
+        2:   43:    return PASS;
+        -:   44:}
+        -:   45:
+        -:   46:/**
+        -:   47: * size when reuse happen
+        -:   48: */
+function test_fix_queue_size_2 called 2 returned 100% blocks executed 55%
+        2:   49:test_result_t test_fix_queue_size_2()
+        -:   50:{
+        2:   51:    void *ctx = fix_queue_init(2);
+call    0 returned 100%
+        2:   52:    EXPECT(0, fix_queue_push(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   53:    EXPECT(0, fix_queue_push(ctx, (void *)1235));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   54:    EXPECT(2, fix_queue_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   55:    EXPECT((void *)1234, fix_queue_pop(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   56:    EXPECT(1, fix_queue_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   57:    EXPECT(0, fix_queue_push(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   58:    EXPECT(2, fix_queue_size(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   59:    
+        2:   60:    return PASS;
+        -:   61:}
+        -:   62:
+        -:   63:/**
+        -:   64: * push fail when full
+        -:   65: */
+function test_fix_queue_push_0 called 2 returned 100% blocks executed 64%
+        2:   66:test_result_t test_fix_queue_push_0()
+        -:   67:{
+        2:   68:    void *ctx = fix_queue_init(1);
+call    0 returned 100%
+        2:   69:    EXPECT(0, fix_queue_push(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   70:    EXPECT(-1, fix_queue_push(ctx, (void *)1235));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   71:   
+        2:   72:    return PASS;
+        -:   73:}
+        -:   74:
+        -:   75:/**
+        -:   76: * push fail when full
+        -:   77: */
+function test_fix_queue_push_1 called 2 returned 100% blocks executed 64%
+        2:   78:test_result_t test_fix_queue_push_1()
+        -:   79:{
+        2:   80:    void *ctx = fix_queue_init(1);
+call    0 returned 100%
+        2:   81:    EXPECT(0, fix_queue_push(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:   82:    EXPECT(-1, fix_queue_push(ctx, (void *)1235));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   83:   
+        2:   84:    return PASS;
+        -:   85:}
+        -:   86:
+        -:   87:/**
+        -:   88: * pop an empty queue
+        -:   89: */
+function test_fix_queue_pop_0 called 2 returned 100% blocks executed 71%
+        2:   90:test_result_t test_fix_queue_pop_0()
+        -:   91:{
+        2:   92:    void *ctx = fix_queue_init(1);
+call    0 returned 100%
+        2:   93:    EXPECT(NULL, fix_queue_pop(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:   94:   
+        2:   95:    return PASS;
+        -:   96:}
+        -:   97:
+        -:   98:/**
+        -:   99: * pop an data queue
+        -:  100: */
+function test_fix_queue_pop_1 called 2 returned 100% blocks executed 64%
+        2:  101:test_result_t test_fix_queue_pop_1()
+        -:  102:{
+        2:  103:    void *ctx = fix_queue_init(1);
+call    0 returned 100%
+        2:  104:    EXPECT(0, fix_queue_push(ctx, (void *)1234));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        2:  105:    EXPECT((void *)1234, fix_queue_pop(ctx));
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+call    3 never executed
+        -:  106:   
+        2:  107:    return PASS;
+        -:  108:}
+        -:  109:
+        -:  110:/**
+        -:  111: * destroy a queue
+        -:  112: */
+function test_fix_queue_destroy_0 called 2 returned 100% blocks executed 60%
+        2:  113:test_result_t test_fix_queue_destroy_0()
+        -:  114:{
+        2:  115:    void *ctx = fix_queue_init(1);
+call    0 returned 100%
+        2:  116:    EXPECT_NOT(NULL, ctx);
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+call    2 never executed
+        2:  117:    fix_queue_destroy(&ctx);
+call    0 returned 100%
+        2:  118:    EXPECT(NULL, ctx);
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+call    2 never executed
+        -:  119:    
+        2:  120:    return PASS;
+        -:  121:}

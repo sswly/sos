@@ -1,4 +1,6 @@
 ==SOS==
+==Compile Guide==
+* Use codelite for compilation
 
 ==Change History==
 ===2012-11-12 0.0.1===

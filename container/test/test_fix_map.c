@@ -32,7 +32,7 @@ test_result_t test_fix_map_size_0()
 {
     void *ctx = fix_map_init(1, compare);
     EXPECT(0, fix_map_size(ctx));
-    
+
     return PASS;
 }
 
@@ -44,7 +44,7 @@ test_result_t test_fix_map_size_1()
     void *ctx = fix_map_init(1, compare);
     EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
     EXPECT(1, fix_map_size(ctx));
-    
+
     return PASS;
 }
 
@@ -61,7 +61,7 @@ test_result_t test_fix_map_size_2()
     EXPECT(1, fix_map_size(ctx));
     EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
     EXPECT(2, fix_map_size(ctx));
-    
+
     return PASS;
 }
 
@@ -70,7 +70,7 @@ test_result_t test_fix_map_size_2()
  */
 test_result_t test_fix_map_size_3()
 {
-    EXPECT(0, fix_map_size(NULL));    
+    EXPECT(0, fix_map_size(NULL));
     return PASS;
 }
 
@@ -82,7 +82,7 @@ test_result_t test_fix_map_push_0()
     void *ctx = fix_map_init(1, compare);
     EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
     EXPECT(-1, fix_map_push(ctx, (void *)1235, (void *)5679));
-   
+
     return PASS;
 }
 
@@ -95,7 +95,7 @@ test_result_t test_fix_map_push_1()
     EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
     EXPECT((void *)5678, fix_map_get(ctx, (void *)1234));
     EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5679));
-    EXPECT((void *)5679, fix_map_get(ctx, (void *)1234));   
+    EXPECT((void *)5679, fix_map_get(ctx, (void *)1234));
 
     return PASS;
 }
@@ -106,7 +106,7 @@ test_result_t test_fix_map_push_1()
 test_result_t test_fix_map_push_2()
 {
     EXPECT(-1, fix_map_push(NULL, (void *)1234, (void *)5678));
-   
+
     return PASS;
 }
 
@@ -118,7 +118,7 @@ test_result_t test_fix_map_get_0()
     void *ctx = fix_map_init(1, compare);
     EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
     EXPECT((void *)5678, fix_map_get(ctx, (void *)1234));
-   
+
     return PASS;
 }
 
@@ -129,7 +129,7 @@ test_result_t test_fix_map_get_1()
 {
     void *ctx = fix_map_init(1, compare);
     EXPECT(NULL, fix_map_get(ctx, (void *)1234));
-   
+
     return PASS;
 }
 
@@ -139,7 +139,7 @@ test_result_t test_fix_map_get_1()
 test_result_t test_fix_map_get_2()
 {
     EXPECT(NULL, fix_map_get(NULL, (void *)1234));
-   
+
     return PASS;
 }
 
@@ -150,7 +150,7 @@ test_result_t test_fix_map_pop_0()
 {
     void *ctx = fix_map_init(1, compare);
     EXPECT(NULL, fix_map_pop(ctx, (void *)1234));
-   
+
     return PASS;
 }
 
@@ -162,7 +162,7 @@ test_result_t test_fix_map_pop_1()
     void *ctx = fix_map_init(1, compare);
     EXPECT(0, fix_map_push(ctx, (void *)1234, (void *)5678));
     EXPECT((void *)5678, fix_map_pop(ctx, (void *)1234));
-   
+
     return PASS;
 }
 
@@ -172,7 +172,7 @@ test_result_t test_fix_map_pop_1()
 test_result_t test_fix_map_pop_2()
 {
     EXPECT(NULL, fix_map_pop(NULL, (void *)1234));
-   
+
     return PASS;
 }
 
@@ -185,7 +185,7 @@ test_result_t test_fix_map_destroy_0()
     EXPECT_NOT(NULL, ctx);
     fix_map_destroy(&ctx);
     EXPECT(NULL, ctx);
-    
+
     return PASS;
 }
 
@@ -195,6 +195,6 @@ test_result_t test_fix_map_destroy_0()
 test_result_t test_fix_map_destroy_1()
 {
     fix_map_destroy(NULL);
-   
+
     return PASS;
 }

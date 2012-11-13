@@ -5,18 +5,17 @@
 ## Debug
 ProjectName            :=container
 ConfigurationName      :=Debug
-IntermediateDirectory  :=./Debug
-OutDir                 := $(IntermediateDirectory)
 WorkspacePath          := "/home/shisu/.codelite/sos"
 ProjectPath            := "/home/shisu/.codelite/sos/container"
+IntermediateDirectory  :=./Debug
+OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=shisu
-Date                   :=11/12/2012
+Date                   :=11/13/2012
 CodeLitePath           :="/home/shisu/.codelite"
 LinkerName             :=gcc
-ArchiveTool            :=ar rcus
 SharedObjectLinkerName :=gcc -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
@@ -28,20 +27,31 @@ OutputSwitch           :=-o
 LibraryPathSwitch      :=-L
 PreprocessorSwitch     :=-D
 SourceSwitch           :=-c 
-CompilerName           :=gcc
-C_CompilerName         :=gcc
-OutputFile             :=$(IntermediateDirectory)/libsos_$(ProjectName).so
+OutputFile             :=$(IntermediateDirectory)/libsos_$(ProjectName).a
 Preprocessors          :=
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
 PreprocessOnlySwitch   :=-E 
+ObjectsFileList        :="/home/shisu/.codelite/sos/container/container.txt"
+PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
-CmpOptions             := -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
 LinkOptions            :=  -fprofile-arcs -ftest-coverage -pg
-IncludePath            :=  "$(IncludeSwitch)." "$(IncludeSwitch)." "$(IncludeSwitch)include" 
-RcIncludePath          :=
-Libs                   :=
-LibPath                := "$(LibraryPathSwitch)." 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)include 
+IncludePCH             := 
+RcIncludePath          := 
+Libs                   := 
+ArLibs                 :=  
+LibPath                := $(LibraryPathSwitch). 
+
+##
+## Common variables
+## AR, CXX, CC, CXXFLAGS and CFLAGS can be overriden using an environment variables
+##
+AR       := ar rcus
+CXX      := gcc
+CC       := gcc
+CXXFLAGS :=  -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
+CFLAGS   :=  -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
 
 
 ##
@@ -53,13 +63,18 @@ Objects=$(IntermediateDirectory)/src_fix_queue$(ObjectSuffix) $(IntermediateDire
 ##
 ## Main Build Targets 
 ##
-all: $(OutputFile)
+.PHONY: all clean PreBuild PrePreBuild PostBuild
+all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile): makeDirStep $(Objects)
+$(OutputFile): $(Objects)
 	@$(MakeDirCommand) $(@D)
-	$(SharedObjectLinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
+	@echo "" > $(IntermediateDirectory)/.d
+	@echo $(Objects) > $(ObjectsFileList)
+	$(AR) $(ArchiveOutputSwitch)$(OutputFile) @$(ObjectsFileList) $(ArLibs)
+	@$(MakeDirCommand) "/home/shisu/.codelite/sos/.build-debug"
+	@echo rebuilt > "/home/shisu/.codelite/sos/.build-debug/container"
 
-makeDirStep:
+./Debug:
 	@test -d ./Debug || $(MakeDirCommand) ./Debug
 
 PreBuild:
@@ -69,36 +84,36 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/src_fix_queue$(ObjectSuffix): src/fix_queue.c $(IntermediateDirectory)/src_fix_queue$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/shisu/.codelite/sos/container/src/fix_queue.c" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_fix_queue$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/container/src/fix_queue.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_fix_queue$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/src_fix_queue$(DependSuffix): src/fix_queue.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/src_fix_queue$(ObjectSuffix) -MF$(IntermediateDirectory)/src_fix_queue$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/src/fix_queue.c"
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_fix_queue$(ObjectSuffix) -MF$(IntermediateDirectory)/src_fix_queue$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/src/fix_queue.c"
 
 $(IntermediateDirectory)/src_fix_queue$(PreprocessSuffix): src/fix_queue.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_fix_queue$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/src/fix_queue.c"
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_fix_queue$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/src/fix_queue.c"
 
 $(IntermediateDirectory)/src_fix_map$(ObjectSuffix): src/fix_map.c $(IntermediateDirectory)/src_fix_map$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/shisu/.codelite/sos/container/src/fix_map.c" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_fix_map$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/container/src/fix_map.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_fix_map$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/src_fix_map$(DependSuffix): src/fix_map.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/src_fix_map$(ObjectSuffix) -MF$(IntermediateDirectory)/src_fix_map$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/src/fix_map.c"
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_fix_map$(ObjectSuffix) -MF$(IntermediateDirectory)/src_fix_map$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/src/fix_map.c"
 
 $(IntermediateDirectory)/src_fix_map$(PreprocessSuffix): src/fix_map.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_fix_map$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/src/fix_map.c"
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_fix_map$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/src/fix_map.c"
 
 $(IntermediateDirectory)/test_test_fix_queue$(ObjectSuffix): test/test_fix_queue.c $(IntermediateDirectory)/test_test_fix_queue$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/shisu/.codelite/sos/container/test/test_fix_queue.c" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/test_test_fix_queue$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/container/test/test_fix_queue.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/test_test_fix_queue$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/test_test_fix_queue$(DependSuffix): test/test_fix_queue.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/test_test_fix_queue$(ObjectSuffix) -MF$(IntermediateDirectory)/test_test_fix_queue$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/test/test_fix_queue.c"
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/test_test_fix_queue$(ObjectSuffix) -MF$(IntermediateDirectory)/test_test_fix_queue$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/test/test_fix_queue.c"
 
 $(IntermediateDirectory)/test_test_fix_queue$(PreprocessSuffix): test/test_fix_queue.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test_test_fix_queue$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/test/test_fix_queue.c"
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test_test_fix_queue$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/test/test_fix_queue.c"
 
 $(IntermediateDirectory)/test_test_fix_map$(ObjectSuffix): test/test_fix_map.c $(IntermediateDirectory)/test_test_fix_map$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/shisu/.codelite/sos/container/test/test_fix_map.c" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/test_test_fix_map$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/container/test/test_fix_map.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/test_test_fix_map$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/test_test_fix_map$(DependSuffix): test/test_fix_map.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/test_test_fix_map$(ObjectSuffix) -MF$(IntermediateDirectory)/test_test_fix_map$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/test/test_fix_map.c"
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/test_test_fix_map$(ObjectSuffix) -MF$(IntermediateDirectory)/test_test_fix_map$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/test/test_fix_map.c"
 
 $(IntermediateDirectory)/test_test_fix_map$(PreprocessSuffix): test/test_fix_map.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test_test_fix_map$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/test/test_fix_map.c"
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test_test_fix_map$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/test/test_fix_map.c"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
@@ -119,5 +134,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/test_test_fix_map$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/test_test_fix_map$(PreprocessSuffix)
 	$(RM) $(OutputFile)
+	$(RM) "/home/shisu/.codelite/sos/.build-debug/container"
 
 

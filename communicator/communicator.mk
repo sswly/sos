@@ -5,18 +5,17 @@
 ## Debug
 ProjectName            :=communicator
 ConfigurationName      :=Debug
-IntermediateDirectory  :=./Debug
-OutDir                 := $(IntermediateDirectory)
 WorkspacePath          := "/home/shisu/.codelite/sos"
 ProjectPath            := "/home/shisu/.codelite/sos/communicator"
+IntermediateDirectory  :=./Debug
+OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=shisu
-Date                   :=11/12/2012
+Date                   :=11/13/2012
 CodeLitePath           :="/home/shisu/.codelite"
 LinkerName             :=gcc
-ArchiveTool            :=ar rcus
 SharedObjectLinkerName :=gcc -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
@@ -28,20 +27,31 @@ OutputSwitch           :=-o
 LibraryPathSwitch      :=-L
 PreprocessorSwitch     :=-D
 SourceSwitch           :=-c 
-CompilerName           :=gcc
-C_CompilerName         :=gcc
-OutputFile             :=$(IntermediateDirectory)/libsos_$(ProjectName).so
+OutputFile             :=$(IntermediateDirectory)/libsos_$(ProjectName).a
 Preprocessors          :=
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
 PreprocessOnlySwitch   :=-E 
+ObjectsFileList        :="/home/shisu/.codelite/sos/communicator/communicator.txt"
+PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
-CmpOptions             := -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
 LinkOptions            :=  -fprofile-arcs -ftest-coverage -pg
-IncludePath            :=  "$(IncludeSwitch)." "$(IncludeSwitch)." "$(IncludeSwitch)include" 
-RcIncludePath          :=
-Libs                   :=$(LibrarySwitch)sos_container 
-LibPath                := "$(LibraryPathSwitch)." "$(LibraryPathSwitch)../container/Debug" 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)include 
+IncludePCH             := 
+RcIncludePath          := 
+Libs                   := 
+ArLibs                 :=  
+LibPath                := $(LibraryPathSwitch). 
+
+##
+## Common variables
+## AR, CXX, CC, CXXFLAGS and CFLAGS can be overriden using an environment variables
+##
+AR       := ar rcus
+CXX      := gcc
+CC       := gcc
+CXXFLAGS :=  -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
+CFLAGS   :=  -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
 
 
 ##
@@ -53,13 +63,18 @@ Objects=$(IntermediateDirectory)/src_bus$(ObjectSuffix) $(IntermediateDirectory)
 ##
 ## Main Build Targets 
 ##
-all: $(OutputFile)
+.PHONY: all clean PreBuild PrePreBuild PostBuild
+all: $(IntermediateDirectory) $(OutputFile)
 
-$(OutputFile): makeDirStep $(Objects)
+$(OutputFile): $(Objects)
 	@$(MakeDirCommand) $(@D)
-	$(SharedObjectLinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
+	@echo "" > $(IntermediateDirectory)/.d
+	@echo $(Objects) > $(ObjectsFileList)
+	$(AR) $(ArchiveOutputSwitch)$(OutputFile) @$(ObjectsFileList) $(ArLibs)
+	@$(MakeDirCommand) "/home/shisu/.codelite/sos/.build-debug"
+	@echo rebuilt > "/home/shisu/.codelite/sos/.build-debug/communicator"
 
-makeDirStep:
+./Debug:
 	@test -d ./Debug || $(MakeDirCommand) ./Debug
 
 PreBuild:
@@ -69,20 +84,20 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/src_bus$(ObjectSuffix): src/bus.c $(IntermediateDirectory)/src_bus$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/shisu/.codelite/sos/communicator/src/bus.c" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_bus$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/communicator/src/bus.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_bus$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/src_bus$(DependSuffix): src/bus.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/src_bus$(ObjectSuffix) -MF$(IntermediateDirectory)/src_bus$(DependSuffix) -MM "/home/shisu/.codelite/sos/communicator/src/bus.c"
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_bus$(ObjectSuffix) -MF$(IntermediateDirectory)/src_bus$(DependSuffix) -MM "/home/shisu/.codelite/sos/communicator/src/bus.c"
 
 $(IntermediateDirectory)/src_bus$(PreprocessSuffix): src/bus.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_bus$(PreprocessSuffix) "/home/shisu/.codelite/sos/communicator/src/bus.c"
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_bus$(PreprocessSuffix) "/home/shisu/.codelite/sos/communicator/src/bus.c"
 
 $(IntermediateDirectory)/test_test_bus$(ObjectSuffix): test/test_bus.c $(IntermediateDirectory)/test_test_bus$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/shisu/.codelite/sos/communicator/test/test_bus.c" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/test_test_bus$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/communicator/test/test_bus.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/test_test_bus$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/test_test_bus$(DependSuffix): test/test_bus.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/test_test_bus$(ObjectSuffix) -MF$(IntermediateDirectory)/test_test_bus$(DependSuffix) -MM "/home/shisu/.codelite/sos/communicator/test/test_bus.c"
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/test_test_bus$(ObjectSuffix) -MF$(IntermediateDirectory)/test_test_bus$(DependSuffix) -MM "/home/shisu/.codelite/sos/communicator/test/test_bus.c"
 
 $(IntermediateDirectory)/test_test_bus$(PreprocessSuffix): test/test_bus.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test_test_bus$(PreprocessSuffix) "/home/shisu/.codelite/sos/communicator/test/test_bus.c"
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test_test_bus$(PreprocessSuffix) "/home/shisu/.codelite/sos/communicator/test/test_bus.c"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
@@ -97,5 +112,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/test_test_bus$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/test_test_bus$(PreprocessSuffix)
 	$(RM) $(OutputFile)
+	$(RM) "/home/shisu/.codelite/sos/.build-debug/communicator"
 
 

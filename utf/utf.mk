@@ -5,18 +5,17 @@
 ## Debug
 ProjectName            :=utf
 ConfigurationName      :=Debug
-IntermediateDirectory  :=./Debug
-OutDir                 := $(IntermediateDirectory)
 WorkspacePath          := "/home/shisu/.codelite/sos"
 ProjectPath            := "/home/shisu/.codelite/sos/utf"
+IntermediateDirectory  :=./Debug
+OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=shisu
-Date                   :=11/12/2012
+Date                   :=11/13/2012
 CodeLitePath           :="/home/shisu/.codelite"
 LinkerName             :=gcc
-ArchiveTool            :=ar rcus
 SharedObjectLinkerName :=gcc -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
@@ -28,20 +27,31 @@ OutputSwitch           :=-o
 LibraryPathSwitch      :=-L
 PreprocessorSwitch     :=-D
 SourceSwitch           :=-c 
-CompilerName           :=gcc
-C_CompilerName         :=gcc
 OutputFile             :=$(IntermediateDirectory)/$(ProjectName)
 Preprocessors          :=
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
 PreprocessOnlySwitch   :=-E 
+ObjectsFileList        :="/home/shisu/.codelite/sos/utf/utf.txt"
+PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
-CmpOptions             := -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
 LinkOptions            :=  -fprofile-arcs -ftest-coverage -pg
-IncludePath            :=  "$(IncludeSwitch)." "$(IncludeSwitch)." "$(IncludeSwitch)include" 
-RcIncludePath          :=
-Libs                   :=$(LibrarySwitch)sos_container $(LibrarySwitch)sos_communicator 
-LibPath                := "$(LibraryPathSwitch)." "$(LibraryPathSwitch)../container/Debug" "$(LibraryPathSwitch)../communicator/Debug" 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)include 
+IncludePCH             := 
+RcIncludePath          := 
+Libs                   := $(LibrarySwitch)sos_container $(LibrarySwitch)sos_communicator 
+ArLibs                 :=  "sos_container" "sos_communicator" 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)../container/Debug $(LibraryPathSwitch)../communicator/Debug 
+
+##
+## Common variables
+## AR, CXX, CC, CXXFLAGS and CFLAGS can be overriden using an environment variables
+##
+AR       := ar rcus
+CXX      := gcc
+CC       := gcc
+CXXFLAGS :=  -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
+CFLAGS   :=  -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
 
 
 ##
@@ -53,13 +63,16 @@ Objects=$(IntermediateDirectory)/src_utf$(ObjectSuffix) $(IntermediateDirectory)
 ##
 ## Main Build Targets 
 ##
+.PHONY: all clean PreBuild PrePreBuild PostBuild
 all: $(OutputFile)
 
-$(OutputFile): makeDirStep $(Objects)
+$(OutputFile): $(IntermediateDirectory)/.d $(Objects) 
 	@$(MakeDirCommand) $(@D)
-	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
+	@echo "" > $(IntermediateDirectory)/.d
+	@echo $(Objects) > $(ObjectsFileList)
+	$(LinkerName) $(OutputSwitch)$(OutputFile) @$(ObjectsFileList) $(LibPath) $(Libs) $(LinkOptions)
 
-makeDirStep:
+$(IntermediateDirectory)/.d:
 	@test -d ./Debug || $(MakeDirCommand) ./Debug
 
 PreBuild:
@@ -69,20 +82,20 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/src_utf$(ObjectSuffix): src/utf.c $(IntermediateDirectory)/src_utf$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/shisu/.codelite/sos/utf/src/utf.c" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_utf$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/utf/src/utf.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_utf$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/src_utf$(DependSuffix): src/utf.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/src_utf$(ObjectSuffix) -MF$(IntermediateDirectory)/src_utf$(DependSuffix) -MM "/home/shisu/.codelite/sos/utf/src/utf.c"
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_utf$(ObjectSuffix) -MF$(IntermediateDirectory)/src_utf$(DependSuffix) -MM "/home/shisu/.codelite/sos/utf/src/utf.c"
 
 $(IntermediateDirectory)/src_utf$(PreprocessSuffix): src/utf.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_utf$(PreprocessSuffix) "/home/shisu/.codelite/sos/utf/src/utf.c"
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_utf$(PreprocessSuffix) "/home/shisu/.codelite/sos/utf/src/utf.c"
 
 $(IntermediateDirectory)/src_mock$(ObjectSuffix): src/mock.c $(IntermediateDirectory)/src_mock$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/shisu/.codelite/sos/utf/src/mock.c" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_mock$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/utf/src/mock.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_mock$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/src_mock$(DependSuffix): src/mock.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/src_mock$(ObjectSuffix) -MF$(IntermediateDirectory)/src_mock$(DependSuffix) -MM "/home/shisu/.codelite/sos/utf/src/mock.c"
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_mock$(ObjectSuffix) -MF$(IntermediateDirectory)/src_mock$(DependSuffix) -MM "/home/shisu/.codelite/sos/utf/src/mock.c"
 
 $(IntermediateDirectory)/src_mock$(PreprocessSuffix): src/mock.c
-	@$(C_CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_mock$(PreprocessSuffix) "/home/shisu/.codelite/sos/utf/src/mock.c"
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_mock$(PreprocessSuffix) "/home/shisu/.codelite/sos/utf/src/mock.c"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
@@ -97,5 +110,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/src_mock$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/src_mock$(PreprocessSuffix)
 	$(RM) $(OutputFile)
+	$(RM) "/home/shisu/.codelite/sos/.build-debug/utf"
 
 

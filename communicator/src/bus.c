@@ -5,12 +5,6 @@
 
 typedef struct
 {
-    void *buf;
-    size_t len;
-} buffer_t;
-
-typedef struct 
-{
     void *buf_queue;
 } bus_ctx_t;
 
@@ -27,18 +21,13 @@ void *bus_init(size_t capacity)
     return ctx;
 }
 
-size_t bus_send(void *ctx, buffer_t *buf)
+int bus_send(void *ctx, void *buf)
 {
     bus_ctx_t *fctx = ctx;
-    if (fix_queue_push(fctx->buf_queue, buf) == 0)
-    {
-        return buf->len;
-    }
-    
-    return 0;
+    return fix_queue_push(fctx->buf_queue, buf);
 }
 
-buffer_t *bus_recv(void *ctx)
+void *bus_recv(void *ctx)
 {
     bus_ctx_t *fctx = ctx;
     return fix_queue_pop(fctx->buf_queue);

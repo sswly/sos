@@ -8,6 +8,7 @@
 
 void all_cases()
 {
+    #ifdef UT
     //add cases for fix queue
     group("fix queue");
     ADD(test_fix_queue_init_0);
@@ -51,8 +52,9 @@ void all_cases()
     ADD(test_bus_init_1);
     ADD(test_bus_destroy_0);
     ADD(test_bus_destroy_1);
-    
+
     group("end");
+    #endif
 };
 
 #endif

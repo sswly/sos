@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CodeLite_Workspace Name="sos" Database="./sos.tags">
   <Project Name="container" Path="container/container.project" Active="No"/>
-  <Project Name="utf" Path="utf/utf.project" Active="Yes"/>
+  <Project Name="utf" Path="utf/utf.project" Active="No"/>
   <Project Name="communicator" Path="communicator/communicator.project"/>
+  <Project Name="worker" Path="worker/worker.project"/>
+  <Project Name="system" Path="system/system.project" Active="No"/>
+  <Project Name="tcp_server" Path="tcp_server/tcp_server.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Project Name="worker" ConfigName="Debug"/>
       <Project Name="utf" ConfigName="Debug"/>
+      <Project Name="tcp_server" ConfigName="Debug"/>
+      <Project Name="system" ConfigName="Debug"/>
       <Project Name="container" ConfigName="Debug"/>
       <Project Name="communicator" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
+    <WorkspaceConfiguration Name="Release" Selected="no">
       <Project Name="container" ConfigName="Release"/>
       <Project Name="utf" ConfigName="Release"/>
       <Project Name="communicator" ConfigName="Release"/>
+      <Project Name="worker" ConfigName="Release"/>
+      <Project Name="system" ConfigName="Release"/>
+      <Project Name="tcp_server" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="UT" Selected="no">
+      <Project Name="worker" ConfigName="Debug"/>
+      <Project Name="utf" ConfigName="Debug"/>
+      <Project Name="tcp_server" ConfigName="Debug"/>
+      <Project Name="system" ConfigName="Debug"/>
+      <Project Name="container" ConfigName="Debug"/>
+      <Project Name="communicator" ConfigName="Debug"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

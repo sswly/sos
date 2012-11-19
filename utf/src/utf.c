@@ -49,6 +49,7 @@ void group(const char *name)
 
 int main(int argc, char **argv)
 {
+    mock_init(1000);
     all_cases();
 	return 0;
 }

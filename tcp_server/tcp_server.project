@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CodeLite_Project Name="utf" InternalType="Console">
+<CodeLite_Project Name="tcp_server" InternalType="Console">
   <Plugins>
     <Plugin Name="qmake">
-      <![CDATA[00020001N0005Debug0000000000000001N0002UT000000000000]]>
+      <![CDATA[00010001N0005Debug000000000000]]>
     </Plugin>
   </Plugins>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
-    <File Name="src/utf.c"/>
-    <File Name="src/mock.c"/>
+    <File Name="src/main.c"/>
   </VirtualDirectory>
-  <VirtualDirectory Name="include">
-    <File Name="include/utf.h"/>
-    <File Name="include/cases.h"/>
-  </VirtualDirectory>
-  <Dependencies Name="Release"/>
   <Dependencies Name="Debug"/>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -33,10 +27,15 @@
         <IncludePath Value="include"/>
       </Compiler>
       <Linker Options="-fprofile-arcs -ftest-coverage;-pg" Required="yes">
-        <LibraryPath Value="../container/Debug"/>
+        <LibraryPath Value="../worker/Debug"/>
         <LibraryPath Value="../communicator/Debug"/>
-        <Library Value="sos_container"/>
+        <LibraryPath Value="../container/Debug"/>
+        <LibraryPath Value="../system/Debug"/>
+        <Library Value="sos_worker"/>
         <Library Value="sos_communicator"/>
+        <Library Value="sos_container"/>
+        <Library Value="sos_system"/>
+        <Library Value="pthread"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
@@ -71,58 +70,12 @@
       </Completion>
     </Configuration>
     <Configuration Name="Release" CompilerType="gnu gcc" DebuggerType="GNU gdb debugger" Type="" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="" C_Options="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
+      <Compiler Options="-O2;-Wall" C_Options="-O2;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="."/>
       </Compiler>
-      <Linker Options="-O2" Required="yes"/>
+      <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
-      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[
-      
-      ]]>
-      </Environment>
-      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
-        <PostConnectCommands/>
-        <StartupCommands/>
-      </Debugger>
-      <PreBuild/>
-      <PostBuild/>
-      <CustomBuild Enabled="no">
-        <RebuildCommand/>
-        <CleanCommand/>
-        <BuildCommand/>
-        <PreprocessFileCommand/>
-        <SingleFileCommand/>
-        <MakefileGenerationCommand/>
-        <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory/>
-      </CustomBuild>
-      <AdditionalRules>
-        <CustomPostBuild/>
-        <CustomPreBuild/>
-      </AdditionalRules>
-      <Completion EnableCpp11="no">
-        <ClangCmpFlagsC/>
-        <ClangCmpFlags/>
-        <ClangPP/>
-        <SearchPaths/>
-      </Completion>
-    </Configuration>
-    <Configuration Name="UT" CompilerType="gnu gcc" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-pg;-g;-Wall;-fprofile-arcs -ftest-coverage" C_Options="-pg;-g;-Wall;-fprofile-arcs -ftest-coverage" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
-        <IncludePath Value="."/>
-        <IncludePath Value="include"/>
-        <Preprocessor Value="UT"/>
-      </Compiler>
-      <Linker Options="-fprofile-arcs -ftest-coverage;-pg" Required="yes">
-        <LibraryPath Value="../container/UT"/>
-        <LibraryPath Value="../communicator/UT"/>
-        <Library Value="sos_container"/>
-        <Library Value="sos_communicator"/>
-      </Linker>
-      <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./UT" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>

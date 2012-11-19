@@ -1,0 +1,9 @@
+/home/shisu/.codelite/sos/communicator/src/bus.c
+/home/shisu/.codelite/sos/communicator/test/test_bus.c
+/home/shisu/.codelite/sos/container/src/fix_queue.c
+/home/shisu/.codelite/sos/container/src/fix_map.c
+/home/shisu/.codelite/sos/container/test/test_fix_queue.c
+/home/shisu/.codelite/sos/container/test/test_fix_map.c
+/home/shisu/.codelite/sos/container/test/mock_fix_queue.c
+/home/shisu/.codelite/sos/utf/src/utf.c
+/home/shisu/.codelite/sos/utf/src/mock.c

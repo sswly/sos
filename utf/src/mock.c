@@ -4,10 +4,7 @@
 #include <string.h>
 #include "fix_map.h"
 
-typedef struct 
-{
-    void *fun_queue;
-} mock_ctx_t;
+static void *mock_queue = NULL;
 
 static int compare(void *p1, void *p2)
 {
@@ -19,19 +16,20 @@ static int compare(void *p1, void *p2)
     return 0;
 }
 
-void *mock_init(size_t capacity)
+void mock_init(size_t capacity)
 {
-    void *fun_queue = fix_map_init(capacity, compare);
-    if (fun_queue == NULL)
-    {
-        return NULL;
-    }
-
-    mock_ctx_t *ctx = calloc(1, sizeof(mock_ctx_t));
-    ctx->fun_queue = fun_queue;
-    return ctx;
+    mock_queue = fix_map_init(capacity, compare);
 }
-void *mock_find(void *ctx, char *name)
+
+void mock_reg(char *name, void *stub)
 {
-    return NULL;
+    printf("mock_reg %s, %p\n", name, stub);
+    fix_map_push(mock_queue, name, stub);
+}
+
+void *mock_find(char *name)
+{
+    void *mock = fix_map_pop(mock_queue, name);
+    printf("mock_find %s, %p\n", name, mock);
+    return mock;
 }

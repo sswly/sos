@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include "fix_queue.h"
+
+#ifdef UT
+#include "utf.h"
+#endif
 
 typedef struct 
 {
@@ -50,9 +55,17 @@ void *fix_queue_init(size_t capacity)
 
 int fix_queue_push(void *ctx, void *node)
 {
-    if (ctx == NULL || fix_queue_is_full(ctx) == 1)
+    if (ctx == NULL)
     {
-//        printf("Cannot insert data to queue\n");
+        return -1;
+    }
+    
+    #ifdef UT
+    if (STUB(fix_queue_is_full, int(*)(void*), ctx) == 1)
+    #else 
+    if (fix_queue_is_full(ctx) == 1)
+    #endif
+    {
         return -1;
     }
     
@@ -77,7 +90,16 @@ int fix_queue_push(void *ctx, void *node)
  */
 void *fix_queue_pop(void *ctx)
 {
-    if (ctx == NULL || fix_queue_is_empty(ctx) == 1)
+    if (ctx == NULL)
+    {
+        return NULL;
+    }
+    
+    #ifdef UT
+    if (STUB(fix_queue_is_empty, int(*)(void*), ctx) == 1)
+    #else 
+    if (fix_queue_is_empty(ctx) == 1)
+    #endif
     {
         return NULL;
     }
@@ -114,3 +136,19 @@ void fix_queue_debug(void *ctx)
     printf("head: %u, tail: %u, capacity: %u\n", 
         fctx->head, fctx->tail, fctx->capa);        
 }
+
+#ifdef UT
+void *fix_queue_mock_ctx(void *ctx, size_t head, size_t tail, size_t capa)
+{
+    if (ctx == NULL)
+    {
+        ctx = fix_queue_init(capa);
+    }
+    
+    fix_queue_ctx_t *fctx = ctx;
+    fctx->head = head;
+    fctx->tail = tail;
+    fctx->capa = capa + 1;
+    return ctx;
+}
+#endif

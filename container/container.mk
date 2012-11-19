@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=shisu
-Date                   :=11/13/2012
+Date                   :=11/19/2012
 CodeLitePath           :="/home/shisu/.codelite"
 LinkerName             :=gcc
 SharedObjectLinkerName :=gcc -shared -fPIC
@@ -58,7 +58,7 @@ CFLAGS   :=  -pg -g -Wall -fprofile-arcs -ftest-coverage $(Preprocessors)
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects=$(IntermediateDirectory)/src_fix_queue$(ObjectSuffix) $(IntermediateDirectory)/src_fix_map$(ObjectSuffix) $(IntermediateDirectory)/test_test_fix_queue$(ObjectSuffix) $(IntermediateDirectory)/test_test_fix_map$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/src_fix_queue$(ObjectSuffix) $(IntermediateDirectory)/src_fix_map$(ObjectSuffix) $(IntermediateDirectory)/test_test_fix_queue$(ObjectSuffix) $(IntermediateDirectory)/test_test_fix_map$(ObjectSuffix) $(IntermediateDirectory)/test_mock_fix_queue$(ObjectSuffix) 
 
 ##
 ## Main Build Targets 
@@ -115,6 +115,14 @@ $(IntermediateDirectory)/test_test_fix_map$(DependSuffix): test/test_fix_map.c
 $(IntermediateDirectory)/test_test_fix_map$(PreprocessSuffix): test/test_fix_map.c
 	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test_test_fix_map$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/test/test_fix_map.c"
 
+$(IntermediateDirectory)/test_mock_fix_queue$(ObjectSuffix): test/mock_fix_queue.c $(IntermediateDirectory)/test_mock_fix_queue$(DependSuffix)
+	$(CC) $(SourceSwitch) "/home/shisu/.codelite/sos/container/test/mock_fix_queue.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/test_mock_fix_queue$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/test_mock_fix_queue$(DependSuffix): test/mock_fix_queue.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/test_mock_fix_queue$(ObjectSuffix) -MF$(IntermediateDirectory)/test_mock_fix_queue$(DependSuffix) -MM "/home/shisu/.codelite/sos/container/test/mock_fix_queue.c"
+
+$(IntermediateDirectory)/test_mock_fix_queue$(PreprocessSuffix): test/mock_fix_queue.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/test_mock_fix_queue$(PreprocessSuffix) "/home/shisu/.codelite/sos/container/test/mock_fix_queue.c"
+
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
 ##
@@ -133,6 +141,9 @@ clean:
 	$(RM) $(IntermediateDirectory)/test_test_fix_map$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/test_test_fix_map$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/test_test_fix_map$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/test_mock_fix_queue$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/test_mock_fix_queue$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/test_mock_fix_queue$(PreprocessSuffix)
 	$(RM) $(OutputFile)
 	$(RM) "/home/shisu/.codelite/sos/.build-debug/container"
 

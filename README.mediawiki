@@ -14,3 +14,11 @@
 * '''Feature''' first version of utf
 ** first version of basic UT framework
 
+===2012-11-19 0.0.2===
+* '''Feature''' first version of worker
+** first version of thread_worker
+
+* '''Feature''' first version of system
+** first version of cpu
+
+* '''Feature''' add mock for utf
